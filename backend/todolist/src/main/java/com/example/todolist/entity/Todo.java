@@ -23,5 +23,4 @@ public class Todo {
     private String titulo;
     private String Descricao;
     private Status status;
-
 }
