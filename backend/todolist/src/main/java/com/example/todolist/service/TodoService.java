@@ -5,12 +5,9 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import com.example.todolist.entity.Todo;
 import com.example.todolist.enums.Status;
 import com.example.todolist.repository.TodoRepository;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Service
@@ -23,9 +20,8 @@ public class TodoService {
         this.todoRepository = todoRepository;
     }
 
-    public List<Todo> criarTodo (Todo  todo){
-        todoRepository.save(todo);
-        return listarTodo();
+    public Todo criarTodo (Todo  todo){
+        return  todoRepository.save(todo);
     }
     public List<Todo> listarTodo() {
         return todoRepository.findAll(Sort.by("titulo").ascending());
@@ -82,6 +78,7 @@ public class TodoService {
             Todo todoExistente = todoEncontrado.get(); 
             
             todoExistente.setStatus(Status.REALIZADO);
+            todoRepository.save(todoExistente);
         }
     }
     public void marcarTodoEmAndamento(Long id){
@@ -91,6 +88,7 @@ public class TodoService {
             Todo todoExistente = todoEncontrado.get(); 
             
             todoExistente.setStatus(Status.EM_ANDAMENTO);
+            todoRepository.save(todoExistente);
         }
     }
 
