@@ -1,0 +1,30 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest            # Imagem oficial do PostgreSQL
+    container_name: todolist_db       # Nome do container para o banco de dados
+    environment:
+      POSTGRES_DB: todos             # Nome do banco de dados que você quer criar
+      POSTGRES_USER: ${DB_USER}      # Variável de ambiente que vai vir do arquivo .env
+      POSTGRES_PASSWORD: ${DB_PASSWORD}  # Variável de ambiente para senha
+    ports:
+      - "5432:5432"                  # Mapeando a porta 5432 (porta padrão do PostgreSQL)
+    volumes:
+      - todolist_db_data:/var/lib/postgresql/data  # Persistência dos dados do banco
+
+  backend:
+    image: openjdk:17-jdk-slim       # Imagem do Java 17
+    container_name: todolist_backend # Nome do container para o backend
+    build: .                         # Indica que o backend será construído a partir do Dockerfile
+    ports:
+      - "8080:8080"                  # Expondo a porta 8080 do Spring Boot
+    depends_on:
+      - db                           # Garantir que o banco de dados suba primeiro
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/todos  # Conexão com o banco de dados
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}  # Usando variável de ambiente para o usuário
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}  # Usando variável de ambiente para a senha
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: org.postgresql.Driver  # Configuração do driver PostgreSQL
+
+volumes:
+  todolist_db_data:
