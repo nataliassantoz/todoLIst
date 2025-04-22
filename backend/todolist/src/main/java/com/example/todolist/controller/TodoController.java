@@ -74,7 +74,7 @@ public class TodoController {
         }
     }
 
-    @PutMapping("/{id}/concluit")
+    @PutMapping("/{id}/concluir")
     public ResponseEntity<String> marcarTodoConcluida( @PathVariable Long id){
         todoService.marcarTodoConcluida(id);
         return ResponseEntity.noContent().build();
